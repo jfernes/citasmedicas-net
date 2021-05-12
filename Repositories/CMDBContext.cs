@@ -23,5 +23,12 @@ namespace citasmedicas.Repositories
         public DbSet<Cita> Citas { get; set; }
 
         public DbSet<Diagnostico> Diagnosticos { get; set; }
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<Usuario>()
+                .HasAlternateKey(u => u.User)
+                .HasName("User");
+        }
     }
 }

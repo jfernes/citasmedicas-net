@@ -102,9 +102,13 @@ namespace citasmedicas.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("User")
-                        .HasColumnType("nvarchar(max)");
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
 
                     b.HasKey("Id");
+
+                    b.HasAlternateKey("User")
+                        .HasName("User");
 
                     b.ToTable("Usuarios");
                 });

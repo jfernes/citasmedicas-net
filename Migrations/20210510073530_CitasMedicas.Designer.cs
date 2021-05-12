@@ -10,7 +10,7 @@ using citasmedicas.Repositories;
 namespace citasmedicas.Migrations
 {
     [DbContext(typeof(CMDBContext))]
-    [Migration("20210509182815_CitasMedicas")]
+    [Migration("20210510073530_CitasMedicas")]
     partial class CitasMedicas
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -104,9 +104,13 @@ namespace citasmedicas.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("User")
-                        .HasColumnType("nvarchar(max)");
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
 
                     b.HasKey("Id");
+
+                    b.HasAlternateKey("User")
+                        .HasName("User");
 
                     b.ToTable("Usuarios");
                 });

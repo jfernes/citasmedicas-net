@@ -10,11 +10,11 @@ namespace citasmedicas.Service
     {
         public ICollection<Cita> FindAll();
 
-        public ICollection<Cita> FindByMedico();
+        public ICollection<Cita> FindByMedico(long id);
 
-        public ICollection<Cita> FindByPaciente();
+        public ICollection<Cita> FindByPaciente(long id);
 
-        public ICollection<Cita> FindById();
+        public Cita FindById(long id);
 
         public bool Save(Cita cita);
 

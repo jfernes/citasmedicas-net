@@ -1,4 +1,6 @@
 ﻿using citasmedicas.Models;
+using citasmedicas.Repositories;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,44 +10,52 @@ namespace citasmedicas.Service
 {
     public class MedicoService : IMedicoService
     {
+        private CMDBContext DBContext;
+
+        public MedicoService(CMDBContext dbContext) => DBContext = dbContext;
+        
         public bool AddPaciente(long medicoId, long pacienteId)
         {
-            throw new NotImplementedException();
+            Medico m = FindById(medicoId);
+            Paciente p = DBContext.Pacientes.Find(pacienteId);
+            if (p is null || m is null || m.Pacientes.Contains(p))
+                return false;
+            m.Pacientes.Add(p);
+            DBContext.SaveChanges();
+            return true;
         }
 
         public void DeleteById(long id)
         {
-            throw new NotImplementedException();
+            Medico m = FindById(id);
+            if (m != null)
+            {
+                DBContext.Medicos.Remove(m);
+                DBContext.SaveChanges();
+            }
         }
 
-        public ICollection<Medico> FindAll()
-        {
-            throw new NotImplementedException();
-        }
+        public ICollection<Medico> FindAll() => (ICollection<Medico>)DBContext.Medicos.Include(m => m.Pacientes);
 
-        public Medico FindById(long id)
-        {
-            throw new NotImplementedException();
-        }
+        public Medico FindById(long id) => (Medico)DBContext.Medicos.Find(id);
 
-        public Medico FindByUsuario(string usuario)
+        public Medico FindByUsuario(string usuario) => (Medico)DBContext.Medicos.Where(m => m.User == usuario);
+       
+        public Medico Login(string usuario, string clave)
         {
-            throw new NotImplementedException();
-        }
-
-        public ICollection<Paciente> FindPacientes(long id)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Medico Login(string Usuario, string clave)
-        {
-            throw new NotImplementedException();
+            Medico m = FindByUsuario(usuario);
+            if (m is null || m.Clave != clave)
+                return null;
+            return m;
         }
 
         public bool Save(Medico medico)
         {
-            throw new NotImplementedException();
+            if (medico is null || FindByUsuario(medico.User) != null)
+                return false;
+            DBContext.Medicos.Add(medico);
+            DBContext.SaveChanges();
+            return true;                
         }
     }
 }

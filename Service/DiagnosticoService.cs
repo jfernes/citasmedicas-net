@@ -1,4 +1,6 @@
 ﻿using citasmedicas.Models;
+using citasmedicas.Repositories;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,24 +10,31 @@ namespace citasmedicas.Service
 {
     public class DiagnosticoService : IDiagnosticoService
     {
+        private CMDBContext DBContext;
+
+        public DiagnosticoService(CMDBContext dbContext) => DBContext = dbContext;
         public void DeleteById(long id)
         {
-            throw new NotImplementedException();
+            Diagnostico d = FindById(id);
+            if (d != null)
+            {
+                DBContext.Diagnosticos.Remove(d);
+                DBContext.SaveChanges();
+            }
         }
 
-        public ICollection<Diagnostico> FindAll()
-        {
-            throw new NotImplementedException();
-        }
+        public ICollection<Diagnostico> FindAll() => (ICollection<Diagnostico>)DBContext.Diagnosticos;
 
-        public Diagnostico FindById(long id)
-        {
-            throw new NotImplementedException();
-        }
+        public Diagnostico FindById(long id) => DBContext.Diagnosticos.Find(id);
+       
 
         public bool Save(Diagnostico diagnostico)
         {
-            throw new NotImplementedException();
+            if (diagnostico is null)
+                return false;
+            DBContext.Diagnosticos.Add(diagnostico);
+            DBContext.SaveChanges();
+            return true;
         }
     }
 }

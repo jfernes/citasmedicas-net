@@ -12,11 +12,13 @@ namespace citasmedicas.Controllers
     [ApiController]
     public class DiagnosticoController
     {
-        public IDiagnosticoService service;
+        private IDiagnosticoService Service;
+        private ICitaService CService;
 
-        public DiagnosticoController(IDiagnosticoService service)
+        public DiagnosticoController(IDiagnosticoService service, ICitaService cService)
         {
-            this.service = service;
+            Service = service;
+            CService = cService;
         }
 
         /*
@@ -29,7 +31,7 @@ namespace citasmedicas.Controllers
         [HttpPost]
         public MessageDTO Create(DiagnosticoDTO diagDTO)
         {
-
+            //citas addDiagnostico para actualizar
         }
 
         [HttpGet("/{id}")]

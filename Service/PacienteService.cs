@@ -1,4 +1,6 @@
 ﻿using citasmedicas.Models;
+using citasmedicas.Repositories;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,44 +10,52 @@ namespace citasmedicas.Service
 {
     public class PacienteService : IPacienteService
     {
+        private CMDBContext DBContext;
+
+        public PacienteService(CMDBContext dbContext) => DBContext = dbContext;
+
         public bool AddMedico(long pacienteId, long medicoId)
         {
-            throw new NotImplementedException();
+            Paciente p = FindById(pacienteId);
+            Medico m = DBContext.Medicos.Find(medicoId);
+            if (p is null || m is null || p.Medicos.Contains(m))
+                return false;
+            p.Medicos.Add(m);
+            DBContext.SaveChanges();
+            return true;
         }
 
         public void DeleteById(long id)
         {
-            throw new NotImplementedException();
+            Paciente p = FindById(id);
+            if (p != null)
+            {
+                DBContext.Pacientes.Remove(p);
+                DBContext.SaveChanges();
+            }
         }
 
-        public ICollection<Paciente> FindAll()
-        {
-            throw new NotImplementedException();
-        }
+        public ICollection<Paciente> FindAll() => (ICollection<Paciente>)DBContext.Pacientes.Include(p => p.Medicos);
 
-        public Paciente FindById(long id)
-        {
-            throw new NotImplementedException();
-        }
+        public Paciente FindById(long id) => DBContext.Pacientes.Find(id);
 
-        public Paciente FindByUsuario(string usuario)
-        {
-            throw new NotImplementedException();
-        }
-
-        public ICollection<Medico> FindMedicos(long id)
-        {
-            throw new NotImplementedException();
-        }
+        public Paciente FindByUsuario(string usuario) => (Paciente)DBContext.Pacientes.Where(p => p.User == usuario);
 
         public Paciente Login(string usuario, string clave)
         {
-            throw new NotImplementedException();
+            Paciente p = FindByUsuario(usuario);
+            if (p is null || p.Clave != clave)
+                return null;
+            return p;
         }
 
         public bool Save(Paciente paciente)
         {
-            throw new NotImplementedException();
+            if (paciente is null || FindByUsuario(paciente.User) != null)
+                return false;
+            DBContext.Pacientes.Add(paciente);
+            DBContext.SaveChanges();
+            return true;
         }
     }
 }

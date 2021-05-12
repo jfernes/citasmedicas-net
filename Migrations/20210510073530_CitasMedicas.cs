@@ -27,7 +27,7 @@ namespace citasmedicas.Migrations
                 {
                     Id = table.Column<long>(type: "bigint", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    User = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    User = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     Nombre = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Apellidos = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Clave = table.Column<string>(type: "nvarchar(max)", nullable: true)
@@ -35,6 +35,7 @@ namespace citasmedicas.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Usuarios", x => x.Id);
+                    table.UniqueConstraint("User", x => x.User);
                 });
 
             migrationBuilder.CreateTable(

@@ -12,18 +12,22 @@ namespace citasmedicas.Controllers
     [ApiController]
     public class CitaController
     {
-        /*
-        public ICitaService Service;
+        
+        private ICitaService Service;
+        private IPacienteService PService;
+        private IMedicoService MService;
 
-        public CitaController(ICitaService service)
+        public CitaController(ICitaService service, IPacienteService pService, IMedicoService mService)
         {
-            this.Service = service;
+            Service = service;
+            PService = pService;
+            MService = mService;
         }
-
+        /*
         [HttpPost]
         public MessageDTO Create(CitaDTO citaDTO)
         {
-
+            //llamar a addPaciente y addMedico
         }
 
         [HttpGet]

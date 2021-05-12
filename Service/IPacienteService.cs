@@ -16,8 +16,6 @@ namespace citasmedicas.Service
 
 		public void DeleteById(long id);
 
-		public ICollection<Medico> FindMedicos(long id);
-
 		public bool AddMedico(long pacienteId, long medicoId);
 
 		public Paciente FindByUsuario(string usuario);
