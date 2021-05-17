@@ -8,17 +8,17 @@ namespace citasmedicas.Service
 {
     public interface ICitaService
     {
-        public ICollection<Cita> FindAll();
+        public IEnumerable<Cita> FindAll();
 
-        public ICollection<Cita> FindByMedico(long id);
+        public IEnumerable<Cita> FindByMedico(long id);
 
-        public ICollection<Cita> FindByPaciente(long id);
+        public IEnumerable<Cita> FindByPaciente(long id);
 
         public Cita FindById(long id);
 
-        public bool Save(Cita cita);
+        public bool Save(Cita cita, long medicoId, long pacienteId);
 
-        public bool AddDiagnostico(long citaId, Diagnostico diagnostico);
+        public bool AddDiagnostico(long citaId, long diagnosticoId);
 
         public void DeleteById(long id);
     }

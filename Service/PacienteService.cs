@@ -35,11 +35,13 @@ namespace citasmedicas.Service
             }
         }
 
-        public ICollection<Paciente> FindAll() => (ICollection<Paciente>)DBContext.Pacientes.Include(p => p.Medicos);
+        public IEnumerable<Paciente> FindAll() => DBContext.Pacientes.Include(p => p.Medicos);
 
         public Paciente FindById(long id) => DBContext.Pacientes.Find(id);
 
-        public Paciente FindByUsuario(string usuario) => (Paciente)DBContext.Pacientes.Where(p => p.User == usuario);
+        public Paciente FindByUsuario(string usuario) => DBContext.Pacientes.SingleOrDefault(p => p.User == usuario);
+            
+
 
         public Paciente Login(string usuario, string clave)
         {

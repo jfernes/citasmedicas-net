@@ -35,11 +35,11 @@ namespace citasmedicas.Service
             }
         }
 
-        public ICollection<Medico> FindAll() => (ICollection<Medico>)DBContext.Medicos.Include(m => m.Pacientes);
+        public IEnumerable<Medico> FindAll() => DBContext.Medicos.Include(m => m.Pacientes);
 
-        public Medico FindById(long id) => (Medico)DBContext.Medicos.Find(id);
+        public Medico FindById(long id) => DBContext.Medicos.Find(id);
 
-        public Medico FindByUsuario(string usuario) => (Medico)DBContext.Medicos.Where(m => m.User == usuario);
+        public Medico FindByUsuario(string usuario) => DBContext.Medicos.SingleOrDefault(m => m.User == usuario);
        
         public Medico Login(string usuario, string clave)
         {

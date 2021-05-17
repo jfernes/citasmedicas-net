@@ -8,7 +8,7 @@ namespace citasmedicas.Service
 {
     public interface IMedicoService
     {
-		public ICollection<Medico> FindAll();
+		public IEnumerable<Medico> FindAll();
 
 		public Medico FindById(long id);
 

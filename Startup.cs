@@ -9,10 +9,13 @@ using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
 using citasmedicas.Repositories;
 using Microsoft.EntityFrameworkCore;
+using AutoMapper;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using citasmedicas.Controllers.Mapper;
+using citasmedicas.Service;
 
 namespace citasmedicas
 {
@@ -36,6 +39,18 @@ namespace citasmedicas
             });
 
             services.AddDbContext<CMDBContext>(options => options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
+            var mapperConfig = new MapperConfiguration(m =>
+            {
+                m.AddProfile<MapperProfile>();
+            });
+            IMapper mapper = mapperConfig.CreateMapper();
+            services.AddSingleton(mapper);
+            services.AddScoped<IUsuarioService, UsuarioService>();
+            services.AddScoped<IMedicoService, MedicoService>();
+            services.AddScoped<IPacienteService, PacienteService>();
+            services.AddScoped<ICitaService, CitaService>();
+            services.AddScoped<IDiagnosticoService, DiagnosticoService>();
+            services.AddMvc();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

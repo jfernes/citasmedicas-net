@@ -11,16 +11,22 @@ namespace citasmedicas.Service
     public class CitaService : ICitaService
     {
         private CMDBContext DBContext;
+        private IDiagnosticoService DService;
 
-        public CitaService(CMDBContext dbContext) => DBContext = dbContext;
+        public CitaService(CMDBContext dbContext, IDiagnosticoService dService)
+        {
+            DBContext = dbContext;
+            DService = dService;
+        }
 
-        public bool AddDiagnostico(long citaId, Diagnostico diagnostico)
+        public bool AddDiagnostico(long citaId, long diagnosticoId)
         {
             Cita c = FindById(citaId);
-            if (c != null && diagnostico != null)
+            Diagnostico d = DService.FindById(diagnosticoId);
+            if (c != null && d != null)
             {
-                DBContext.Diagnosticos.Add(diagnostico);
-                c.Diagnostico = diagnostico;
+                DBContext.Diagnosticos.Add(d);
+                c.Diagnostico = d;
                 DBContext.SaveChanges();
                 return true;
             }
@@ -42,18 +48,33 @@ namespace citasmedicas.Service
         public Cita FindById(long id) => DBContext.Citas.Find(id);
 
 
-        public ICollection<Cita> FindByMedico(long id) => (ICollection<Cita>)DBContext.Citas.Where(c => c.Medico.Id == id);
+        public IEnumerable<Cita> FindByMedico(long id)
+        {
+            var response = DBContext.Citas.Where(c => c.Medico.Id == id).FirstOrDefault();
+            if (response is null)
+                return new List<Cita>();
+            return DBContext.Citas.Where(c => c.Medico.Id == id);
+        }
 
-        public ICollection<Cita> FindByPaciente(long id) => (ICollection<Cita>) DBContext.Citas.Where(c => c.Paciente.Id == id);
+        public IEnumerable<Cita> FindByPaciente(long id) 
+        {
+            var response = DBContext.Citas.Where(c => c.Medico.Id == id).FirstOrDefault();
+            if (response is null)
+                return new List<Cita>();
+            return DBContext.Citas.Where(c => c.Medico.Id == id);
+        }
 
-        public bool Save(Cita cita)
+        public bool Save(Cita cita, long medicoId, long pacienteId)
         {
             if (cita is null)
                 return false;
-            Medico m = DBContext.Medicos.Find(cita.Medico.Id);
-            Paciente p = DBContext.Pacientes.Find(cita.Paciente.Id);
+            Medico m = DBContext.Medicos.Find(medicoId);
+            Paciente p = DBContext.Pacientes.Find(pacienteId);
             if (m is null || p is null)
                 return false;
+            cita.Medico = m;
+            cita.Paciente = p;
+            cita.Diagnostico = null;
             DBContext.Citas.Add(cita);
             DBContext.SaveChanges();
             return true;
