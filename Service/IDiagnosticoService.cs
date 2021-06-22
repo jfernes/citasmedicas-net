@@ -8,7 +8,7 @@ namespace citasmedicas.Service
 {
     public interface IDiagnosticoService
     {
-		public ICollection<Diagnostico> FindAll();
+		public IEnumerable<Diagnostico> FindAll();
 
 		public Diagnostico FindById(long id);
 

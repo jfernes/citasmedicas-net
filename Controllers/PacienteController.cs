@@ -20,7 +20,7 @@ namespace citasmedicas.Controllers
         public PacienteController(IPacienteService service, IMapper mapper)
         {
             this.Service = service;
-            this.mapper = mapper;
+            this.Mapper = mapper;
         }
         
         [HttpGet]

@@ -23,7 +23,7 @@ namespace citasmedicas.Service
             }
         }
 
-        public ICollection<Diagnostico> FindAll() => (ICollection<Diagnostico>)DBContext.Diagnosticos;
+        public IEnumerable<Diagnostico> FindAll() => DBContext.Diagnosticos;
 
         public Diagnostico FindById(long id) => DBContext.Diagnosticos.Find(id);
        

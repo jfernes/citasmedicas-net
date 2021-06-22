@@ -37,12 +37,12 @@ namespace citasmedicas.Controllers
             return Ok(new MessageDTO(200, diagnosticosDTO));
         }
 
-        [HttpPost]
-        public IActionResult Create(DiagnosticoDTO diagDTO)
+        [HttpPost("{citaId}")]
+        public IActionResult Create(DiagnosticoDTO diagDTO, long citaId)
         {
-            if (Service.Save(Mapper.Map<Diagnostico>(diagDTO)))
+            
+            if (CService.AddDiagnostico(citaId, Mapper.Map<Diagnostico>(diagDTO)))
                 return Ok(new MessageDTO(200, "El diagnóstico se ha registrado correctamente"));
-
             return Ok(new MessageDTO(412, "El diagnóstico ya existe"));
             //citas addDiagnostico para actualizar
         }

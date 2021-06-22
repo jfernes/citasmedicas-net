@@ -18,7 +18,7 @@ namespace citasmedicas.Service
 
         public bool Save(Cita cita, long medicoId, long pacienteId);
 
-        public bool AddDiagnostico(long citaId, long diagnosticoId);
+        public bool AddDiagnostico(long citaId, Diagnostico diagnostico);
 
         public void DeleteById(long id);
     }

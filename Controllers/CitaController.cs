@@ -34,8 +34,6 @@ namespace citasmedicas.Controllers
         {
             if (Service.Save(Mapper.Map<Cita>(citaDTO), citaDTO.Medico, citaDTO.Paciente))
             {
-                PService.AddMedico(citaDTO.Paciente, citaDTO.Medico);
-                MService.AddPaciente(citaDTO.Medico, citaDTO.Paciente);
                 return Ok(new MessageDTO(200, "Cita creada correctamente"));
             }
             return Ok(new MessageDTO(412, "La cita ya existe"));
@@ -96,7 +94,7 @@ namespace citasmedicas.Controllers
         [HttpPost("diagnostico/{id}")]
         public IActionResult AddDiagnostico(long id, DiagnosticoDTO diagnosticoDTO)
         {
-            if (Service.AddDiagnostico(id, diagnosticoDTO.Id))
+            if (Service.AddDiagnostico(id, Mapper.Map<Diagnostico>(diagnosticoDTO)))
             {
                 return Ok(new MessageDTO(200, "Diagnóstico añadido correctamente"));
             }

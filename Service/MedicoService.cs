@@ -20,7 +20,10 @@ namespace citasmedicas.Service
             Paciente p = DBContext.Pacientes.Find(pacienteId);
             if (p is null || m is null || m.Pacientes.Contains(p))
                 return false;
-            m.Pacientes.Add(p);
+            if (!p.Medicos.Contains(m))
+                p.Medicos.Add(m);
+            if (!m.Pacientes.Contains(p))
+                m.Pacientes.Add(p);
             DBContext.SaveChanges();
             return true;
         }
@@ -37,10 +40,10 @@ namespace citasmedicas.Service
 
         public IEnumerable<Medico> FindAll() => DBContext.Medicos.Include(m => m.Pacientes);
 
-        public Medico FindById(long id) => DBContext.Medicos.Find(id);
+        public Medico FindById(long id) => DBContext.Medicos.Where(m => m.Id == id).Include(m => m.Pacientes).FirstOrDefault();
 
-        public Medico FindByUsuario(string usuario) => DBContext.Medicos.SingleOrDefault(m => m.User == usuario);
-       
+        public Medico FindByUsuario(string usuario) => DBContext.Medicos.Where(m => m.User == usuario).Include(m => m.Pacientes).FirstOrDefault();
+
         public Medico Login(string usuario, string clave)
         {
             Medico m = FindByUsuario(usuario);
